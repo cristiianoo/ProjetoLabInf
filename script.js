@@ -84,40 +84,6 @@ function addTask(task) {
     // Adiciona botões para editar, resetar e controlar o timer
     const actionButtons = document.createElement('div');
     actionButtons.classList.add('btn-group');
-    
-    // Botão Editar
-    const editButton = document.createElement('button');
-    editButton.classList.add('btn');
-    editButton.classList.add('btn-warning');
-    editButton.textContent = 'Editar';
-    editButton.addEventListener('click', () => {
-        editTask(task, taskTime);
-    });
-    actionButtons.appendChild(editButton);
-
-    // Botão Resetar
-    const resetButton = document.createElement('button');
-    resetButton.classList.add('btn');
-    resetButton.classList.add('btn-info');
-    resetButton.textContent = 'Resetar';
-    resetButton.addEventListener('click', () => {
-        resetTask(task, taskTime);
-    });
-    actionButtons.appendChild(resetButton);
-
-    // Botão Eliminar
-    const deleteButton = document.createElement('button');
-    deleteButton.classList.add('btn');
-    deleteButton.classList.add('btn-danger');
-    deleteButton.textContent = 'Eliminar';
-    deleteButton.addEventListener('click', () => {
-        confirmDeleteModal.show();
-        confirmDeleteButton.addEventListener('click', () => {
-            taskList.removeChild(listItem);
-            confirmDeleteModal.hide();
-        });
-    });
-    actionButtons.appendChild(deleteButton);
 
     // Botão Começar/Parar
     const startStopButton = document.createElement('button');
@@ -136,6 +102,40 @@ function addTask(task) {
         }
     });
     actionButtons.appendChild(startStopButton);
+
+    // Botão Editar
+    const editButton = document.createElement('button');
+    editButton.classList.add('btn');
+    editButton.classList.add('btn-warning');
+    editButton.textContent = 'Editar';
+    editButton.addEventListener('click', () => {
+        editTask(task, taskTime);
+    });
+    actionButtons.appendChild(editButton);
+    
+    // Botão Resetar
+    const resetButton = document.createElement('button');
+    resetButton.classList.add('btn');
+    resetButton.classList.add('btn-info');
+    resetButton.textContent = 'Reset';
+    resetButton.addEventListener('click', () => {
+        resetTask(task, taskTime);
+    });
+    actionButtons.appendChild(resetButton);
+    
+    // Botão Eliminar
+    const deleteButton = document.createElement('button');
+    deleteButton.classList.add('btn');
+    deleteButton.classList.add('btn-danger');
+    deleteButton.textContent = 'Eliminar';
+    deleteButton.addEventListener('click', () => {
+        confirmDeleteModal.show();
+        confirmDeleteButton.addEventListener('click', () => {
+            taskList.removeChild(listItem);
+            confirmDeleteModal.hide();
+        });
+    });
+    actionButtons.appendChild(deleteButton);
 
     listItem.appendChild(actionButtons);
     taskList.appendChild(listItem);
