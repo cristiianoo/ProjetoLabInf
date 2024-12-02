@@ -32,7 +32,7 @@ let interval;
 
 // Adicionar tarefa
 addTaskButton.addEventListener('click', () => {
-    if (taskCount >= 5) {
+    if (taskCount >= 10) {
         alert('O limite de 5 tarefas foi atingido.');
         return;
     }
