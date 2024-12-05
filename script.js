@@ -142,17 +142,103 @@ function addTask(task) {
     taskCount++;  // Incrementa o contador de tarefas
 }
 
-function startTimer(task, taskTime, startStopButton) {
+function startTimer(task, taskTime, startStopButton, progressBar) {
     interval = setInterval(() => {
         if (task.time > 0) {
             task.time--;
             taskTime.textContent = formatTime(task.time);
+
+            // Atualiza a barra de progresso
+            const progressPercent = Math.max(0, (task.time / task.initialTime) * 100);
+            progressBar.style.width = `${progressPercent}%`;
+            progressBar.textContent = `${Math.round(progressPercent)}%`;
         } else {
             clearInterval(interval);
             taskTime.textContent = 'Tempo Esgotado';
-            startStopButton.textContent = 'Começar'; // Reinicia o botão
+            startStopButton.textContent = 'Começar';
+            progressBar.style.width = '0%';
+            progressBar.textContent = '0%';
         }
     }, 1000);
+}
+
+function addTask(task) {
+    const listItem = document.createElement('li');
+    listItem.classList.add('list-group-item', 'd-flex', 'flex-column');
+
+    // Exibe o nome da tarefa
+    const taskHeader = document.createElement('div');
+    taskHeader.classList.add('d-flex', 'justify-content-between', 'align-items-center');
+    const taskName = document.createElement('span');
+    taskName.textContent = task.name;
+    const taskTime = document.createElement('span');
+    taskTime.textContent = formatTime(task.time);
+    taskHeader.appendChild(taskName);
+    taskHeader.appendChild(taskTime);
+    listItem.appendChild(taskHeader);
+
+    // Barra de progresso
+    const progressBarContainer = document.createElement('div');
+    progressBarContainer.classList.add('progress', 'my-2');
+    const progressBar = document.createElement('div');
+    progressBar.classList.add('progress-bar');
+    progressBar.setAttribute('role', 'progressbar');
+    progressBar.style.width = '100%'; // Começa com 100%
+    progressBar.textContent = '100%';
+    progressBarContainer.appendChild(progressBar);
+    listItem.appendChild(progressBarContainer);
+
+    // Botões de ação
+    const actionButtons = document.createElement('div');
+    actionButtons.classList.add('btn-group', 'justify-content-end');
+
+    const startStopButton = document.createElement('button');
+    startStopButton.classList.add('btn', 'btn-success');
+    startStopButton.textContent = 'Começar';
+    startStopButton.addEventListener('click', () => {
+        if (task.time > 0) {
+            if (startStopButton.textContent === 'Começar') {
+                startTimer(task, taskTime, startStopButton, progressBar);
+                startStopButton.textContent = 'Parar';
+            } else {
+                clearInterval(interval);
+                startStopButton.textContent = 'Começar';
+            }
+        }
+    });
+    actionButtons.appendChild(startStopButton);
+
+    const editButton = document.createElement('button');
+    editButton.classList.add('btn', 'btn-warning');
+    editButton.textContent = 'Editar';
+    editButton.addEventListener('click', () => editTask(task, taskTime));
+    actionButtons.appendChild(editButton);
+
+    const resetButton = document.createElement('button');
+    resetButton.classList.add('btn', 'btn-info');
+    resetButton.textContent = 'Reset';
+    resetButton.addEventListener('click', () => {
+        resetTask(task, taskTime);
+        progressBar.style.width = '100%';
+        progressBar.textContent = '100%';
+    });
+    actionButtons.appendChild(resetButton);
+
+    const deleteButton = document.createElement('button');
+    deleteButton.classList.add('btn', 'btn-danger');
+    deleteButton.textContent = 'Eliminar';
+    deleteButton.addEventListener('click', () => {
+        confirmDeleteModal.show();
+        confirmDeleteButton.addEventListener('click', () => {
+            taskList.removeChild(listItem);
+            confirmDeleteModal.hide();
+        });
+    });
+    actionButtons.appendChild(deleteButton);
+
+    listItem.appendChild(actionButtons);
+    taskList.appendChild(listItem);
+    taskCount++;
 }
 
 function formatTime(seconds) {
