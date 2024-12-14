@@ -6,6 +6,7 @@ const taskList = document.getElementById('taskList');
 const addTimerModal = new bootstrap.Modal(document.getElementById('addTimerModal'));
 const editTaskModal = new bootstrap.Modal(document.getElementById('editTaskModal'));
 const confirmDeleteModal = new bootstrap.Modal(document.getElementById('confirmDeleteModal'));
+const duplicateTaskModal = new bootstrap.Modal(document.getElementById('duplicateTaskModal'));
 
 // Inputs from modals
 const hoursInput = document.getElementById('hoursInput');
@@ -39,13 +40,18 @@ function saveTasks() {
 
 // Add a new task
 addTaskButton.addEventListener('click', () => {
-    if (taskCount >= 10) {
-        alert('O limite de 10 tarefas foi atingido.');
+    const taskName = taskInput.value.trim();
+    if (!taskName) return;
+
+    // Verificar se a tarefa já existe
+    const isDuplicate = tasks.some(task => task.name.toLowerCase() === taskName.toLowerCase());
+    if (isDuplicate) {
+        duplicateTaskModal.show(); // Exibe o modal se for duplicada
         return;
     }
 
-    if (!taskInput.value.trim()) return;
-    currentTask = { name: taskInput.value.trim() };
+    // Continue com a criação da tarefa
+    currentTask = { name: taskName };
     addTimerModal.show();
 });
 
