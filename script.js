@@ -7,6 +7,7 @@ const addTimerModal = new bootstrap.Modal(document.getElementById('addTimerModal
 const editTaskModal = new bootstrap.Modal(document.getElementById('editTaskModal'));
 const confirmDeleteModal = new bootstrap.Modal(document.getElementById('confirmDeleteModal'));
 const duplicateTaskModal = new bootstrap.Modal(document.getElementById('duplicateTaskModal'));
+const taskLimitModal = new bootstrap.Modal(document.getElementById('taskLimitModal'));
 
 // Inputs from modals
 const hoursInput = document.getElementById('hoursInput');
@@ -47,6 +48,12 @@ addTaskButton.addEventListener('click', () => {
     const isDuplicate = tasks.some(task => task.name.toLowerCase() === taskName.toLowerCase());
     if (isDuplicate) {
         duplicateTaskModal.show(); // Exibe o modal se for duplicada
+        return;
+    }
+
+    // Verificar se o número de tarefas já atingiu o limite de 10
+    if (tasks.length >= 10) {
+        taskLimitModal.show(); // Exibe o modal de limite de tarefas
         return;
     }
 
